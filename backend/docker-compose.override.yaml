@@ -1,0 +1,74 @@
+version: "3.8"
+
+services:
+  gateway-api:
+    build:
+      context: .
+      dockerfile: Gateway.API/Dockerfile.dev
+      target: development
+    volumes:
+      - .:/src
+      - nuget_cache:/root/.nuget/packages
+      - /src/Gateway.API/bin
+      - /src/Gateway.API/obj
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - DOTNET_USE_POLLING_FILE_WATCHER=true
+    ports:
+      - "5000:5000"
+    depends_on:
+      - project-api
+    networks:
+      - gameai-network
+    develop:
+      watch:
+        - action: sync
+          path: ./Gateway.API/
+          target: /src/Gateway.API/
+          ignore:
+            - bin/
+            - obj/
+        - action: sync
+          path: ./GameAI.Shared/
+          target: /src/GameAI.Shared/
+        - action: rebuild
+          path: ./Gateway.API/Gateway.API.csproj
+
+  project-api:
+    build:
+      context: .
+      dockerfile: Project.API/Dockerfile.dev
+      target: development
+    volumes:
+      - .:/src
+      - nuget_cache:/root/.nuget/packages
+      - /src/Project.API/bin
+      - /src/Project.API/obj
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - DOTNET_USE_POLLING_FILE_WATCHER=true
+    expose:
+      - "5001"
+    networks:
+      - gameai-network
+    develop:
+      watch:
+        - action: sync
+          path: ./Project.API/
+          target: /src/Project.API/
+          ignore:
+            - bin/
+            - obj/
+        - action: sync
+          path: ./GameAI.Shared/
+          target: /src/GameAI.Shared/
+        - action: rebuild
+          path: ./Project.API/Project.API.csproj
+
+volumes:
+  nuget_cache:
+
+
+networks:
+  gameai-network:
+    driver: bridge

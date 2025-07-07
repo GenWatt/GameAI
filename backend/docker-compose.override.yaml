@@ -3,14 +3,16 @@ version: "3.8"
 services:
   gateway-api:
     build:
-      context: .
-      dockerfile: Gateway.API/Dockerfile.dev
+      context: ./services
+      dockerfile: Gateway/Dockerfile.dev
       target: development
     volumes:
-      - .:/src
+      - ./services:/src
       - nuget_cache:/root/.nuget/packages
-      - /src/Gateway.API/bin
-      - /src/Gateway.API/obj
+      - /src/Gateway/bin
+      - /src/Gateway/obj
+      - /src/Shared/bin
+      - /src/Shared/obj
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
       - DOTNET_USE_POLLING_FILE_WATCHER=true
@@ -20,30 +22,25 @@ services:
       - project-api
     networks:
       - gameai-network
-    develop:
-      watch:
-        - action: sync
-          path: ./Gateway.API/
-          target: /src/Gateway.API/
-          ignore:
-            - bin/
-            - obj/
-        - action: sync
-          path: ./GameAI.Shared/
-          target: /src/GameAI.Shared/
-        - action: rebuild
-          path: ./Gateway.API/Gateway.API.csproj
 
   project-api:
     build:
-      context: .
-      dockerfile: Project.API/Dockerfile.dev
+      context: ./services
+      dockerfile: ProjectService/Dockerfile.dev
       target: development
     volumes:
-      - .:/src
+      - ./services:/src
       - nuget_cache:/root/.nuget/packages
-      - /src/Project.API/bin
-      - /src/Project.API/obj
+      - /src/ProjectService/src/ProjectService.Api/bin
+      - /src/ProjectService/src/ProjectService.Api/obj
+      - /src/ProjectService/src/ProjectService.Application/bin
+      - /src/ProjectService/src/ProjectService.Application/obj
+      - /src/ProjectService/src/ProjectService.Core/bin
+      - /src/ProjectService/src/ProjectService.Core/obj
+      - /src/ProjectService/src/ProjectService.Domain/bin
+      - /src/ProjectService/src/ProjectService.Domain/obj
+      - /src/Shared/bin
+      - /src/Shared/obj
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
       - DOTNET_USE_POLLING_FILE_WATCHER=true
@@ -51,19 +48,32 @@ services:
       - "5001"
     networks:
       - gameai-network
-    develop:
-      watch:
-        - action: sync
-          path: ./Project.API/
-          target: /src/Project.API/
-          ignore:
-            - bin/
-            - obj/
-        - action: sync
-          path: ./GameAI.Shared/
-          target: /src/GameAI.Shared/
-        - action: rebuild
-          path: ./Project.API/Project.API.csproj
+
+  conversation-api:
+    build:
+      context: ./services
+      dockerfile: ConversationService/Dockerfile.dev
+      target: development
+    volumes:
+      - ./services:/src
+      - nuget_cache:/root/.nuget/packages
+      - /src/ConversationService/src/ConversationService.Api/bin
+      - /src/ConversationService/src/ConversationService.Api/obj
+      - /src/ConversationService/src/ConversationService.Application/bin
+      - /src/ConversationService/src/ConversationService.Application/obj
+      - /src/ConversationService/src/ConversationService.Core/bin
+      - /src/ConversationService/src/ConversationService.Core/obj
+      - /src/ConversationService/src/ConversationService.Domain/bin
+      - /src/ConversationService/src/ConversationService.Domain/obj
+      - /src/Shared/bin
+      - /src/Shared/obj
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - DOTNET_USE_POLLING_FILE_WATCHER=true
+    expose:
+      - "5002"
+    networks:
+      - gameai-network
 
 volumes:
   nuget_cache:

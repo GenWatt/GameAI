@@ -1,0 +1,53 @@
+{
+    "Routes": [
+        {
+            "UpstreamPathTemplate": "/api/projects/{everything}",
+            "UpstreamHttpMethod": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
+            ],
+            "DownstreamPathTemplate": "/api/projects/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5001
+                }
+            ]
+        },
+        {
+            "UpstreamPathTemplate": "/api/conversations/{everything}",
+            "UpstreamHttpMethod": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
+            ],
+            "DownstreamPathTemplate": "/api/conversations/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5002
+                }
+            ]
+        },
+        {
+            "UpstreamPathTemplate": "/api/ai/{everything}",
+            "UpstreamHttpMethod": [
+                "GET",
+                "POST"
+            ],
+            "DownstreamPathTemplate": "/api/ai/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 8000
+                }
+            ]
+        }
+    ]
+}

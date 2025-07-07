@@ -1,17 +1,39 @@
 version: "3.8"
+
+networks:
+  gameai-network:
+    driver: bridge
+
+volumes:
+  nuget_cache:
+
+
 services:
   gateway-api:
     build:
       context: .
-      dockerfile: Gateway.API/Dockerfile
+      dockerfile: services/Gateway/Dockerfile
     ports:
       - "5000:5000"
     depends_on:
       - project-api
+    networks:
+      - gameai-network
 
   project-api:
     build:
       context: .
-      dockerfile: Project.API/Dockerfile
+      dockerfile: services/ProjectService/Dockerfile
     expose:
       - "5001"
+    networks:
+      - gameai-network
+
+  conversation-api:
+    build:
+      context: .
+      dockerfile: services/ConversationService/Dockerfile
+    expose:
+      - "5002"
+    networks:
+      - gameai-network

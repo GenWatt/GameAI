@@ -1,0 +1,23 @@
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS development
+WORKDIR /src
+
+ENV API_PROJECT_NAME=SynapseStudio.ConversationService.Api
+ENV APPLICATION_PROJECT_NAME=SynapseStudio.ConversationService.Application
+ENV CORE_PROJECT_NAME=SynapseStudio.ConversationService.Core
+ENV DOMAIN_PROJECT_NAME=SynapseStudio.ConversationService.Domain
+ENV SHARED_PROJECT_NAME=SynapseStudio.Shared
+
+ENV ASPNETCORE_ENVIRONMENT=Docker
+ENV ASPNETCORE_URLS=http://+:5002
+ENV DOTNET_USE_POLLING_FILE_WATCHER=true
+
+EXPOSE 5002
+
+# Copy project files first for better Docker layer caching
+COPY ["SynapseStudio.ConversationService/src", "SynapseStudio.ConversationService/src/"]
+COPY ["${SHARED_PROJECT_NAME}", "${SHARED_PROJECT_NAME}/"]
+
+# Restore packages using the main API project
+RUN dotnet restore "SynapseStudio.ConversationService/src/${API_PROJECT_NAME}/${API_PROJECT_NAME}.csproj"
+
+ENTRYPOINT dotnet watch run --project SynapseStudio.ConversationService/src/${API_PROJECT_NAME}/${API_PROJECT_NAME}.csproj --no-launch-profile

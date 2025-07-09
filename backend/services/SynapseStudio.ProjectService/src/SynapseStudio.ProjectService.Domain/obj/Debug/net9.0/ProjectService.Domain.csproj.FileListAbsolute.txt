@@ -1,0 +1,12 @@
+C:\Users\Adrian\AdrianekApps\GameAI\backend\services\ProjectService\src\ProjectService.Domain\bin\Debug\net9.0\ProjectService.Domain.deps.json
+C:\Users\Adrian\AdrianekApps\GameAI\backend\services\ProjectService\src\ProjectService.Domain\bin\Debug\net9.0\ProjectService.Domain.dll
+C:\Users\Adrian\AdrianekApps\GameAI\backend\services\ProjectService\src\ProjectService.Domain\bin\Debug\net9.0\ProjectService.Domain.pdb
+C:\Users\Adrian\AdrianekApps\GameAI\backend\services\ProjectService\src\ProjectService.Domain\obj\Debug\net9.0\ProjectService.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Adrian\AdrianekApps\GameAI\backend\services\ProjectService\src\ProjectService.Domain\obj\Debug\net9.0\ProjectService.Domain.AssemblyInfoInputs.cache
+C:\Users\Adrian\AdrianekApps\GameAI\backend\services\ProjectService\src\ProjectService.Domain\obj\Debug\net9.0\ProjectService.Domain.AssemblyInfo.cs
+C:\Users\Adrian\AdrianekApps\GameAI\backend\services\ProjectService\src\ProjectService.Domain\obj\Debug\net9.0\ProjectService.Domain.csproj.CoreCompileInputs.cache
+C:\Users\Adrian\AdrianekApps\GameAI\backend\services\ProjectService\src\ProjectService.Domain\obj\Debug\net9.0\ProjectService.Domain.sourcelink.json
+C:\Users\Adrian\AdrianekApps\GameAI\backend\services\ProjectService\src\ProjectService.Domain\obj\Debug\net9.0\ProjectService.Domain.dll
+C:\Users\Adrian\AdrianekApps\GameAI\backend\services\ProjectService\src\ProjectService.Domain\obj\Debug\net9.0\refint\ProjectService.Domain.dll
+C:\Users\Adrian\AdrianekApps\GameAI\backend\services\ProjectService\src\ProjectService.Domain\obj\Debug\net9.0\ProjectService.Domain.pdb
+C:\Users\Adrian\AdrianekApps\GameAI\backend\services\ProjectService\src\ProjectService.Domain\obj\Debug\net9.0\ref\ProjectService.Domain.dll

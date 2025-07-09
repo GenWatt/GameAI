@@ -1,0 +1,21 @@
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS development
+WORKDIR /src
+
+ENV PROJECT_NAME=SynapseStudio.Gateway
+ENV SHARED_PROJECT_NAME=SynapseStudio.Shared
+
+ENV ASPNETCORE_ENVIRONMENT=Docker
+ENV ASPNETCORE_URLS=http://+:5000
+ENV DOTNET_USE_POLLING_FILE_WATCHER=true
+
+EXPOSE 5000
+
+COPY ["${PROJECT_NAME}/${PROJECT_NAME}.csproj", "${PROJECT_NAME}/"]
+COPY ["${SHARED_PROJECT_NAME}/**/*.csproj", "./"]
+
+RUN dotnet restore "${PROJECT_NAME}/${PROJECT_NAME}.csproj"
+
+COPY ${PROJECT_NAME}/. ${PROJECT_NAME}/
+COPY ${SHARED_PROJECT_NAME}/. ${SHARED_PROJECT_NAME}/
+
+ENTRYPOINT dotnet watch run --project ${PROJECT_NAME} --no-launch-profile

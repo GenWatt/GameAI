@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: conversation-api
+  namespace: gameai-prod
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: conversation-api
+  template:
+    metadata:
+      labels:
+        app: conversation-api
+    spec:
+      containers:
+      - name: conversation-api
+        image: genwatt/conversation-api:latest
+        ports:
+        - containerPort: 5002
+        envFrom:
+        - configMapRef:
+            name: gameai-config-prod
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: conversation-api
+  namespace: gameai-prod
+spec:
+  type: ClusterIP
+  ports:
+  - port: 5002
+    targetPort: 5002
+  selector:
+    app: conversation-api

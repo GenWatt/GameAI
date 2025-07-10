@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gameai-config-prod
+  namespace: gameai-prod
+data:
+  ASPNETCORE_ENVIRONMENT: "Production"

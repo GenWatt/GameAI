@@ -2,10 +2,11 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS development
 WORKDIR /src
 
 ENV API_PROJECT_NAME=SynapseStudio.ProjectService.Api
-ENV APPLICATION_PROJECT_NAME=SynapseStudio.ProjectService.Application
-ENV CORE_PROJECT_NAME=SynapseStudio.ProjectService.Core
-ENV DOMAIN_PROJECT_NAME=SynapseStudio.ProjectService.Domain
+# ENV APPLICATION_PROJECT_NAME=SynapseStudio.ProjectService.Application
+# ENV CORE_PROJECT_NAME=SynapseStudio.ProjectService.Core
+# ENV DOMAIN_PROJECT_NAME=SynapseStudio.ProjectService.Domain
 ENV SHARED_PROJECT_NAME=SynapseStudio.Shared
+ENV PROJECT_NAME=SynapseStudio.ProjectService
 
 ENV ASPNETCORE_ENVIRONMENT=Docker
 ENV ASPNETCORE_URLS=http://+:5001
@@ -13,11 +14,9 @@ ENV DOTNET_USE_POLLING_FILE_WATCHER=true
 
 EXPOSE 5001
 
-# Copy project files first for better Docker layer caching
-COPY ["SynapseStudio.ProjectService/src", "SynapseStudio.ProjectService/src/"]
-COPY ["${SHARED_PROJECT_NAME}", "${SHARED_PROJECT_NAME}/"]
+COPY ["services/${PROJECT_NAME}/", "services/${PROJECT_NAME}/"]
+COPY ["services/${SHARED_PROJECT_NAME}/", "services/${SHARED_PROJECT_NAME}/"]
 
-# Restore packages using the main API project
-RUN dotnet restore "SynapseStudio.ProjectService/src/${API_PROJECT_NAME}/${API_PROJECT_NAME}.csproj"
+RUN dotnet restore "services/${PROJECT_NAME}/src/${API_PROJECT_NAME}/${API_PROJECT_NAME}.csproj"
 
-ENTRYPOINT dotnet watch run --project SynapseStudio.ProjectService/src/${API_PROJECT_NAME}/${API_PROJECT_NAME}.csproj --no-launch-profile
+CMD ["dotnet", "watch", "run", "--project", "services/SynapseStudio.ProjectService/src/SynapseStudio.ProjectService.Api/SynapseStudio.ProjectService.Api.csproj", "--no-launch-profile"]

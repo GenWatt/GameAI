@@ -2,7 +2,6 @@ param(
     [switch]$Watch
 )
 
-# Define project paths
 $sharedProject = "./services/SynapseStudio.Shared/SynapseStudio.Shared.csproj"
 $projectServiceApi = "./services/SynapseStudio.ProjectService/src/SynapseStudio.ProjectService.Api/SynapseStudio.ProjectService.Api.csproj"
 $conversationServiceApi = "./services/SynapseStudio.ConversationService/src/SynapseStudio.ConversationService.Api/SynapseStudio.ConversationService.Api.csproj"

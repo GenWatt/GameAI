@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gameai-config
+  namespace: gameai-dev
+data:
+  ASPNETCORE_ENVIRONMENT: "Docker"
+  DOTNET_USE_POLLING_FILE_WATCHER: "true"

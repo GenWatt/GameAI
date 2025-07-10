@@ -1,32 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Adrian\\AdrianekApps\\GameAI\\backend\\services\\SynapseStudio.ProjectService\\src\\SynapseStudio.ProjectService.Domain\\SynapseStudio.ProjectService.Domain.csproj": {}
+    "/src/services/SynapseStudio.ProjectService/src/SynapseStudio.ProjectService.Domain/SynapseStudio.ProjectService.Domain.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Adrian\\AdrianekApps\\GameAI\\backend\\services\\SynapseStudio.ProjectService\\src\\SynapseStudio.ProjectService.Domain\\SynapseStudio.ProjectService.Domain.csproj": {
+    "/src/services/SynapseStudio.ProjectService/src/SynapseStudio.ProjectService.Domain/SynapseStudio.ProjectService.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Adrian\\AdrianekApps\\GameAI\\backend\\services\\SynapseStudio.ProjectService\\src\\SynapseStudio.ProjectService.Domain\\SynapseStudio.ProjectService.Domain.csproj",
+        "projectUniqueName": "/src/services/SynapseStudio.ProjectService/src/SynapseStudio.ProjectService.Domain/SynapseStudio.ProjectService.Domain.csproj",
         "projectName": "SynapseStudio.ProjectService.Domain",
-        "projectPath": "C:\\Users\\Adrian\\AdrianekApps\\GameAI\\backend\\services\\SynapseStudio.ProjectService\\src\\SynapseStudio.ProjectService.Domain\\SynapseStudio.ProjectService.Domain.csproj",
-        "packagesPath": "C:\\Users\\Adrian\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Adrian\\AdrianekApps\\GameAI\\backend\\services\\SynapseStudio.ProjectService\\src\\SynapseStudio.ProjectService.Domain\\obj\\",
+        "projectPath": "/src/services/SynapseStudio.ProjectService/src/SynapseStudio.ProjectService.Domain/SynapseStudio.ProjectService.Domain.csproj",
+        "packagesPath": "/root/.nuget/packages/",
+        "outputPath": "/src/services/SynapseStudio.ProjectService/src/SynapseStudio.ProjectService.Domain/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Adrian\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/root/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -66,7 +59,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.302/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

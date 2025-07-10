@@ -1,0 +1,78 @@
+load('ext://restart_process', 'docker_build_with_restart')
+
+# Allow local Kubernetes context
+allow_k8s_contexts('docker-desktop')
+
+# Gateway API with restart_process
+docker_build_with_restart(
+    'gameai/gateway-api:dev',
+    '.', 
+    dockerfile='./services/SynapseStudio.Gateway/Dockerfile.dev',
+    entrypoint=[
+        'dotnet', 'watch', 'run',
+        '--project', './services/SynapseStudio.Gateway/SynapseStudio.Gateway.csproj',
+        '--no-launch-profile'
+    ],
+    only=[
+        './services/SynapseStudio.Gateway/',
+        './services/SynapseStudio.Shared/',
+    ],
+    live_update=[
+        sync('./services/SynapseStudio.Gateway/', '/src/services/SynapseStudio.Gateway/'),
+        sync('./services/SynapseStudio.Shared/', '/src/services/SynapseStudio.Shared/'),
+    ]
+)
+
+# Project API with restart_process
+docker_build_with_restart(
+    'gameai/project-api:dev',
+    '.',
+    dockerfile='./services/SynapseStudio.ProjectService/Dockerfile.dev',
+    entrypoint=['dotnet', 'watch', 'run', '--project', './services/SynapseStudio.ProjectService/src/SynapseStudio.ProjectService.Api/SynapseStudio.ProjectService.Api.csproj', '--no-launch-profile'],
+    only=['./services/SynapseStudio.ProjectService/', './services/SynapseStudio.Shared/'],
+    live_update=[
+        sync('./services/SynapseStudio.ProjectService/', '/src/services/SynapseStudio.ProjectService/'),
+        sync('./services/SynapseStudio.Shared/', '/src/services/SynapseStudio.Shared/'),
+    ]
+)
+
+# Conversation API with restart_process
+docker_build_with_restart(
+    'gameai/conversation-api:dev',
+    '.',
+    dockerfile='./services/SynapseStudio.ConversationService/Dockerfile.dev',
+    entrypoint=['dotnet', 'watch', 'run', '--project', 'services/SynapseStudio.ConversationService/src/SynapseStudio.ConversationService.Api/SynapseStudio.ConversationService.Api.csproj', '--no-launch-profile'],
+    only=['./services/SynapseStudio.ConversationService/', './services/SynapseStudio.Shared/'],
+    live_update=[
+        sync('./services/SynapseStudio.ConversationService/', '/src/services/SynapseStudio.ConversationService/'),
+        sync('./services/SynapseStudio.Shared/', '/src/services/SynapseStudio.Shared/'),
+    ]
+)
+
+# Deploy Kubernetes manifests
+k8s_yaml([
+    'k8s/namespace.yaml',
+    'k8s/configmap.yaml',
+    'k8s/project-deployment.yaml',
+    'k8s/conversation-deployment.yaml', 
+    'k8s/gateway-deployment.yaml'
+])
+
+# Configure resources and port forwarding
+k8s_resource('gateway-api', port_forwards='30000:5000')
+k8s_resource('project-api', port_forwards='5001:5001')
+k8s_resource('conversation-api', port_forwards='5002:5002')
+
+# Display helpful information
+print("""
+Tilt Development Environment for C# Microservices
+
+Access your services:
+- Gateway API: http://localhost:30000
+- Project API: http://localhost:5001  
+- Conversation API: http://localhost:5002
+- Tilt UI: http://localhost:10350
+
+Hot reload is enabled with restart_process extension!
+Change your C# code and see updates automatically.
+""")

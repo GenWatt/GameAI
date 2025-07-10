@@ -10,12 +10,12 @@ ENV DOTNET_USE_POLLING_FILE_WATCHER=true
 
 EXPOSE 5000
 
-COPY ["${PROJECT_NAME}/${PROJECT_NAME}.csproj", "${PROJECT_NAME}/"]
-COPY ["${SHARED_PROJECT_NAME}/**/*.csproj", "./"]
+COPY ["services/${PROJECT_NAME}/${PROJECT_NAME}.csproj", "services/${PROJECT_NAME}/"]
+COPY ["services/${SHARED_PROJECT_NAME}/**/*.csproj", "services/${SHARED_PROJECT_NAME}/"]
 
-RUN dotnet restore "${PROJECT_NAME}/${PROJECT_NAME}.csproj"
+RUN dotnet restore "services/${PROJECT_NAME}/${PROJECT_NAME}.csproj"
 
-COPY ${PROJECT_NAME}/. ${PROJECT_NAME}/
-COPY ${SHARED_PROJECT_NAME}/. ${SHARED_PROJECT_NAME}/
+COPY services/${PROJECT_NAME}/. services/${PROJECT_NAME}/
+COPY services/${SHARED_PROJECT_NAME}/. services/${SHARED_PROJECT_NAME}/
 
-ENTRYPOINT dotnet watch run --project ${PROJECT_NAME} --no-launch-profile
+CMD ["dotnet", "watch", "run", "--project", "services/SynapseStudio.Gateway/SynapseStudio.Gateway.csproj", "--no-launch-profile"]

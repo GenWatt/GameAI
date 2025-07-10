@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: conversation-api
+  namespace: gameai-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: conversation-api
+  template:
+    metadata:
+      labels:
+        app: conversation-api
+    spec:
+      containers:
+      - name: conversation-api
+        image: gameai/conversation-api:dev
+        ports:
+        - containerPort: 5002
+        env:
+        - name: ASPNETCORE_URLS
+          value: "http://+:5002"
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "Docker"
+        - name: DOTNET_USE_POLLING_FILE_WATCHER
+          value: "true"
+        envFrom:
+        - configMapRef:
+            name: gameai-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: conversation-api
+  namespace: gameai-dev
+spec:
+  type: ClusterIP
+  ports:
+  - port: 5002
+    targetPort: 5002
+  selector:
+    app: conversation-api

@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "i48p4AkPjJ4=",
+  "dgSpecHash": "E8gsTKeH6oY=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Adrian\\AdrianekApps\\GameAI\\backend\\services\\SynapseStudio.ProjectService\\src\\SynapseStudio.ProjectService.Api\\SynapseStudio.ProjectService.Api.csproj",
+  "projectFilePath": "/src/services/SynapseStudio.ProjectService/src/SynapseStudio.ProjectService.Api/SynapseStudio.ProjectService.Api.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Adrian\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.6\\microsoft.aspnetcore.openapi.9.0.6.nupkg.sha512",
-    "C:\\Users\\Adrian\\.nuget\\packages\\microsoft.openapi\\1.6.17\\microsoft.openapi.1.6.17.nupkg.sha512"
+    "/root/.nuget/packages/microsoft.aspnetcore.openapi/9.0.6/microsoft.aspnetcore.openapi.9.0.6.nupkg.sha512",
+    "/root/.nuget/packages/microsoft.openapi/1.6.17/microsoft.openapi.1.6.17.nupkg.sha512"
   ],
   "logs": []
 }

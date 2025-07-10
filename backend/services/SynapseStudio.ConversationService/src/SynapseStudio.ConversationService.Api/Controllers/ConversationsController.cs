@@ -9,7 +9,7 @@ public class ConversationsController : ControllerBase
     [HttpGet]
     public IActionResult GetConversations()
     {
-        return Ok(new { Message = "List of conversations" });
+        return Ok(new { Message = "List of conversations2222" });
     }
 
     [HttpPost]

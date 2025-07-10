@@ -3,16 +3,22 @@ version: "3.8"
 services:
   gateway-api:
     build:
-      context: ./services
-      dockerfile: SynapseStudio.Gateway/Dockerfile.dev
+      context: .
+      dockerfile: ./services/SynapseStudio.Gateway/Dockerfile.dev
       target: development
     volumes:
-      - ./services:/src
+      - .:/src
       - nuget_cache:/root/.nuget/packages
-      - /src/SynapseStudio.Gateway/bin
-      - /src/SynapseStudio.Gateway/obj
-      - /src/SynapseStudio.Shared/bin
-      - /src/SynapseStudio.Shared/obj
+      - /src/services/SynapseStudio.ProjectService/src/SynapseStudio.ProjectService.Api/bin
+      - /src/services/SynapseStudio.ProjectService/src/SynapseStudio.ProjectService.Api/obj
+      - /src/services/SynapseStudio.ProjectService/src/SynapseStudio.ProjectService.Application/bin
+      - /src/services/SynapseStudio.ProjectService/src/SynapseStudio.ProjectService.Application/obj
+      - /src/services/SynapseStudio.ProjectService/src/SynapseStudio.ProjectService.Core/bin
+      - /src/services/SynapseStudio.ProjectService/src/SynapseStudio.ProjectService.Core/obj
+      - /src/services/SynapseStudio.ProjectService/src/SynapseStudio.ProjectService.Domain/bin
+      - /src/services/SynapseStudio.ProjectService/src/SynapseStudio.ProjectService.Domain/obj
+      - /src/services/SynapseStudio.Shared/bin
+      - /src/services/SynapseStudio.Shared/obj
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
       - DOTNET_USE_POLLING_FILE_WATCHER=true
@@ -25,11 +31,11 @@ services:
 
   project-api:
     build:
-      context: ./services
-      dockerfile: SynapseStudio.ProjectService/Dockerfile.dev
+      context: .
+      dockerfile: ./services/SynapseStudio.ProjectService/Dockerfile.dev
       target: development
     volumes:
-      - ./services:/src
+      - .:/src
       - nuget_cache:/root/.nuget/packages
       - /src/SynapseStudio.ProjectService/src/SynapseStudio.ProjectService.Api/bin
       - /src/SynapseStudio.ProjectService/src/SynapseStudio.ProjectService.Api/obj
@@ -51,22 +57,22 @@ services:
 
   conversation-api:
     build:
-      context: ./services
-      dockerfile: SynapseStudio.ConversationService/Dockerfile.dev
+      context: .
+      dockerfile: ./services/SynapseStudio.ConversationService/Dockerfile.dev
       target: development
     volumes:
-      - ./services:/src
+      - .:/src
       - nuget_cache:/root/.nuget/packages
-      - /src/SynapseStudio.ConversationService/src/SynapseStudio.ConversationService.Api/bin
-      - /src/SynapseStudio.ConversationService/src/SynapseStudio.ConversationService.Api/obj
-      - /src/SynapseStudio.ConversationService/src/SynapseStudio.ConversationService.Application/bin
-      - /src/SynapseStudio.ConversationService/src/SynapseStudio.ConversationService.Application/obj
-      - /src/SynapseStudio.ConversationService/src/SynapseStudio.ConversationService.Core/bin
-      - /src/SynapseStudio.ConversationService/src/SynapseStudio.ConversationService.Core/obj
-      - /src/SynapseStudio.ConversationService/src/SynapseStudio.ConversationService.Domain/bin
-      - /src/SynapseStudio.ConversationService/src/SynapseStudio.ConversationService.Domain/obj
-      - /src/SynapseStudio.Shared/bin
-      - /src/SynapseStudio.Shared/obj
+      - /src/services/services/SynapseStudio.ConversationService/src/SynapseStudio.ConversationService.Api/bin
+      - /src/services/services/SynapseStudio.ConversationService/src/SynapseStudio.ConversationService.Api/obj
+      - /src/services/services/SynapseStudio.ConversationService/src/SynapseStudio.ConversationService.Application/bin
+      - /src/services/services/SynapseStudio.ConversationService/src/SynapseStudio.ConversationService.Application/obj
+      - /src/services/services/SynapseStudio.ConversationService/src/SynapseStudio.ConversationService.Core/bin
+      - /src/services/services/SynapseStudio.ConversationService/src/SynapseStudio.ConversationService.Core/obj
+      - /src/services/services/SynapseStudio.ConversationService/src/SynapseStudio.ConversationService.Domain/bin
+      - /src/services/services/SynapseStudio.ConversationService/src/SynapseStudio.ConversationService.Domain/obj
+      - /src/services/services/SynapseStudio.Shared/bin
+      - /src/services/services/SynapseStudio.Shared/obj
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
       - DOTNET_USE_POLLING_FILE_WATCHER=true

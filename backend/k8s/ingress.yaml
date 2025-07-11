@@ -1,8 +1,8 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: gameai-ingress-prod
-  namespace: gameai-prod
+  name: gameai-ingress-dev
+  namespace: gameai-dev
   annotations:
     kubernetes.io/ingress.class: "nginx"
 spec:

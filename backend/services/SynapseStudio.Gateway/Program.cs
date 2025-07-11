@@ -1,5 +1,6 @@
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
+using SynapseStudio.Shared.Observability.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 var environment = builder.Environment.EnvironmentName;
@@ -10,6 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddOcelot(builder.Configuration);
 builder.Services.AddHealthChecks();
+builder.Services.AddObservability();
 
 builder.Services.AddCors(options =>
 {
@@ -30,6 +32,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+app.MapObservability();
 app.UseRouting();
 app.MapHealthChecks("/api/health");
 

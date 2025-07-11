@@ -12,6 +12,10 @@ spec:
     metadata:
       labels:
         app: gateway-api
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/path: '/metrics'
+        prometheus.io/port: '5000'
     spec:
       containers:
       - name: gateway-api
@@ -35,10 +39,9 @@ metadata:
   name: gateway-api
   namespace: gameai-dev
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
   - port: 5000
     targetPort: 5000
-    nodePort: 30000
   selector:
     app: gateway-api

@@ -1,7 +1,13 @@
 load('ext://restart_process', 'docker_build_with_restart')
 
-# Allow local Kubernetes context
 allow_k8s_contexts('docker-desktop')
+
+# Install NGINX Ingress Controller using local_resource
+local_resource(
+    'install-nginx-ingress',
+    'kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.1/deploy/static/provider/cloud/deploy.yaml',
+    labels=['infrastructure']
+)
 
 # Gateway API with restart_process
 docker_build_with_restart(
@@ -61,29 +67,49 @@ k8s_yaml([
 
 k8s_yaml([
     'k8s/monitoring/namespace.yaml',
+    'k8s/monitoring/prometheus-rbac.yaml',
     'k8s/monitoring/prometheus-config.yaml',
     'k8s/monitoring/prometheus-deployment.yaml',
+    'k8s/monitoring/grafana-dashboards.yaml',
     'k8s/monitoring/grafana-deployment.yaml'
 ])
 
 # Configure resources and port forwarding
-k8s_resource('gateway-api', port_forwards='5000:5000')
-k8s_resource('project-api', port_forwards='5001:5001')
-k8s_resource('conversation-api', port_forwards='5002:5002')
+k8s_resource('gateway-api', port_forwards='5000:5000', resource_deps=['install-nginx-ingress'], labels=['services'])
+k8s_resource('project-api', port_forwards='5001:5001', labels=['services'])
+k8s_resource('conversation-api', port_forwards='5002:5002', labels=['services'])
 
-k8s_resource('prometheus', port_forwards='9090:9090')
-k8s_resource('grafana', port_forwards='3001:3000')
+k8s_resource('prometheus', port_forwards='9090:9090', labels=['monitoring'])
+k8s_resource('grafana', port_forwards='3001:3000', labels=['monitoring'])
 
-# Display helpful information
 print("""
 Tilt Development Environment for C# Microservices
 
 Access your services:
 - Gateway (via Ingress): http://api.synapsestudio.com
+- Gateway (Direct): http://localhost:5000
+- Project API: http://localhost:5001
+- Conversation API: http://localhost:5002
 - Tilt UI: http://localhost:10350
-- Grafana: http://localhost:3001 (user: admin, pass: prom-operator)
+- Grafana: http://localhost:3001 (auto-login enabled)
 - Prometheus: http://localhost:9090
 
-Hot reload is enabled with restart_process extension!
-Change your C# code and see updates automatically.
+Features enabled:
+Hot reload with restart_process extension
+Prometheus metrics collection
+Grafana dashboards with C# microservices metrics
+Service discovery and monitoring
+Auto NGINX Ingress Controller installation
+Grafana auto-login (no credentials needed)
+
+Organization in Tilt UI:
+nfrastructure: NGINX Ingress Controller
+Services: Gateway, Project API, Conversation API  
+Monitoring: Prometheus, Grafana
+
+Domain setup (requires admin privileges):
+Add to C:\\Windows\\System32\\drivers\\etc\\hosts:
+127.0.0.1 api.synapsestudio.com
+
+Change your C# code and see updates automatically!
 """)

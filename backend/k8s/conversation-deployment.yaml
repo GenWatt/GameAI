@@ -38,6 +38,10 @@ kind: Service
 metadata:
   name: conversation-api
   namespace: gameai-dev
+  annotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/path: '/metrics'
+    prometheus.io/port: '5002'
 spec:
   type: ClusterIP
   ports:

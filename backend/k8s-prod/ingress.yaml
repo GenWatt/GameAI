@@ -1,0 +1,121 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gameai-ingress
+  namespace: gameai-prod
+  labels:
+    app.kubernetes.io/name: gameai
+    app.kubernetes.io/component: ingress
+    environment: production
+  annotations:
+    # Ingress class
+    kubernetes.io/ingress.class: "nginx"
+    
+    # SSL Configuration
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    
+    # Security Headers
+    nginx.ingress.kubernetes.io/server-snippet: |
+      add_header X-Frame-Options "SAMEORIGIN" always;
+      add_header X-Content-Type-Options "nosniff" always;
+      add_header X-XSS-Protection "1; mode=block" always;
+      add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+      add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https:; frame-ancestors 'self';" always;
+      add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
+    
+    # Rate Limiting
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+    nginx.ingress.kubernetes.io/rate-limit-window: "1m"
+    nginx.ingress.kubernetes.io/rate-limit-connections: "10"
+    
+    # CORS Configuration
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, PUT, DELETE, OPTIONS"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization"
+    nginx.ingress.kubernetes.io/cors-expose-headers: "Content-Length,Content-Range"
+    nginx.ingress.kubernetes.io/cors-max-age: "86400"
+    
+    # Performance
+    nginx.ingress.kubernetes.io/proxy-body-size: "32m"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "16k"
+    nginx.ingress.kubernetes.io/proxy-buffers-number: "8"
+    
+    # Health checks
+    nginx.ingress.kubernetes.io/upstream-health-check: "true"
+    nginx.ingress.kubernetes.io/upstream-health-check-path: "/health"
+    nginx.ingress.kubernetes.io/upstream-health-check-interval: "30s"
+    nginx.ingress.kubernetes.io/upstream-health-check-timeout: "5s"
+    nginx.ingress.kubernetes.io/upstream-health-check-fails: "3"
+    nginx.ingress.kubernetes.io/upstream-health-check-passes: "2"
+    
+    # Monitoring
+    nginx.ingress.kubernetes.io/enable-access-log: "true"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "Server: GameAI-Production";
+
+spec:
+  tls:
+  - hosts:
+    - api.gameai.production  # Replace with your actual domain
+    - gameai.production      # Replace with your actual domain
+    secretName: gameai-tls-cert
+  rules:
+  - host: api.gameai.production  # Replace with your actual domain
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: gateway-api
+            port:
+              number: 5000
+  - host: gameai.production      # Replace with your actual domain
+    http:
+      paths:
+      - path: /api/gateway
+        pathType: Prefix
+        backend:
+          service:
+            name: gateway-api
+            port:
+              number: 5000
+      - path: /api/conversation
+        pathType: Prefix
+        backend:
+          service:
+            name: conversation-api
+            port:
+              number: 5002
+      - path: /api/project
+        pathType: Prefix
+        backend:
+          service:
+            name: project-api
+            port:
+              number: 5001
+---
+
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+  labels:
+    app.kubernetes.io/name: gameai
+    app.kubernetes.io/component: certificate-issuer
+    environment: production
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: your-email@domain.com 
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    solvers:
+    - http01:
+        ingress:
+          class: nginx

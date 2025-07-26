@@ -1,0 +1,119 @@
+apiVersion: v1
+kind: ServiceMonitor
+metadata:
+  name: gameai-services
+  namespace: gameai-prod
+  labels:
+    app.kubernetes.io/name: gameai
+    app.kubernetes.io/component: monitoring
+    environment: production
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: gateway-api
+  endpoints:
+  - port: http
+    path: /metrics
+    interval: 30s
+    scrapeTimeout: 10s
+---
+apiVersion: v1
+kind: ServiceMonitor
+metadata:
+  name: gameai-conversation-api
+  namespace: gameai-prod
+  labels:
+    app.kubernetes.io/name: gameai
+    app.kubernetes.io/component: monitoring
+    environment: production
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: conversation-api
+  endpoints:
+  - port: http
+    path: /metrics
+    interval: 30s
+    scrapeTimeout: 10s
+---
+apiVersion: v1
+kind: ServiceMonitor
+metadata:
+  name: gameai-project-api
+  namespace: gameai-prod
+  labels:
+    app.kubernetes.io/name: gameai
+    app.kubernetes.io/component: monitoring
+    environment: production
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: project-api
+  endpoints:
+  - port: http
+    path: /metrics
+    interval: 30s
+    scrapeTimeout: 10s
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: gameai-alerts
+  namespace: gameai-prod
+  labels:
+    app.kubernetes.io/name: gameai
+    app.kubernetes.io/component: monitoring
+    environment: production
+spec:
+  groups:
+  - name: gameai.rules
+    rules:
+    - alert: GameAIServiceDown
+      expr: up{job=~"gameai-.*"} == 0
+      for: 5m
+      labels:
+        severity: critical
+        environment: production
+      annotations:
+        summary: "GameAI service {{ $labels.job }} is down"
+        description: "GameAI service {{ $labels.job }} has been down for more than 5 minutes."
+    
+    - alert: GameAIHighErrorRate
+      expr: rate(http_requests_total{job=~"gameai-.*",status=~"5.."}[5m]) > 0.1
+      for: 5m
+      labels:
+        severity: warning
+        environment: production
+      annotations:
+        summary: "High error rate on GameAI service {{ $labels.job }}"
+        description: "GameAI service {{ $labels.job }} has error rate above 10% for more than 5 minutes."
+    
+    - alert: GameAIHighCPUUsage
+      expr: rate(container_cpu_usage_seconds_total{namespace="gameai-prod"}[5m]) > 0.8
+      for: 10m
+      labels:
+        severity: warning
+        environment: production
+      annotations:
+        summary: "High CPU usage in GameAI production"
+        description: "CPU usage is above 80% for more than 10 minutes in GameAI production namespace."
+    
+    - alert: GameAIHighMemoryUsage
+      expr: container_memory_usage_bytes{namespace="gameai-prod"} / container_spec_memory_limit_bytes > 0.9
+      for: 10m
+      labels:
+        severity: warning
+        environment: production
+      annotations:
+        summary: "High memory usage in GameAI production"
+        description: "Memory usage is above 90% for more than 10 minutes in GameAI production namespace."
+    
+    - alert: GameAIPodCrashLooping
+      expr: rate(kube_pod_container_status_restarts_total{namespace="gameai-prod"}[15m]) > 0
+      for: 5m
+      labels:
+        severity: critical
+        environment: production
+      annotations:
+        summary: "Pod is crash looping in GameAI production"
+        description: "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} is crash looping."

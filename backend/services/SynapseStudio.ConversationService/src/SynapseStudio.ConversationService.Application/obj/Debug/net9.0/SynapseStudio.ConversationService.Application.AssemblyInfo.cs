@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SynapseStudio.ConversationService.Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ee36e07ab07359605d3b75ff3ef0eb4c6fca2dd7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6dbd296a9f3f1e8479245530487b996b74ff060d")]
 [assembly: System.Reflection.AssemblyProductAttribute("SynapseStudio.ConversationService.Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SynapseStudio.ConversationService.Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

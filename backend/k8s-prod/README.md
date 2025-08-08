@@ -48,6 +48,8 @@ k8s-prod/
 ├── gateway-deployment.yaml    # API Gateway deployment with HPA and PDB
 ├── conversation-deployment.yaml # Conversation service deployment
 ├── project-deployment.yaml   # Project service deployment
+- ├── postgres.yaml            # PostgreSQL deployment configuration
+- ├── rabbitmq.yaml            # RabbitMQ deployment configuration
 ├── ingress.yaml              # Ingress with TLS, security headers, and rate limiting
 ├── network-policies.yaml     # Network security policies
 ├── monitoring.yaml           # Prometheus monitoring configuration

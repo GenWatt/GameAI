@@ -24,3 +24,6 @@ data:
   OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4317"
   OTEL_SERVICE_NAME: "gameai"
   OTEL_RESOURCE_ATTRIBUTES: "service.version=1.0.0,deployment.environment=production"
+  POSTGRES_HOST: "postgres"
+  POSTGRES_DB: "projectdb"
+  RABBIT__HOST: "rabbitmq"

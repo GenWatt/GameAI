@@ -91,6 +91,23 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
+        - name: ConnectionStrings__ProjectDb
+          value: "Host=$(POSTGRES_HOST);Port=5432;Database=$(POSTGRES_DB);Username=$(POSTGRES_USER);Password=$(POSTGRES_PASSWORD)"
+        - name: Rabbit__Host
+          valueFrom:
+            configMapKeyRef:
+              name: gameai-config-prod
+              key: RABBIT__HOST
+        - name: Rabbit__User
+          valueFrom:
+            secretKeyRef:
+              name: gameai-secrets
+              key: rabbit-user
+        - name: Rabbit__Pass
+          valueFrom:
+            secretKeyRef:
+              name: gameai-secrets
+              key: rabbit-password
         - name: POD_NAMESPACE
           valueFrom:
             fieldRef:

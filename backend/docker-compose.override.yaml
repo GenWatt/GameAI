@@ -1,6 +1,17 @@
 version: "3.8"
 
 services:
+  postgres:
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-projectdb}
+      POSTGRES_USER: ${POSTGRES_USER:-project}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-projectpwd}
+    ports:
+      - "5432:5432"
+  rabbitmq:
+    ports:
+      - "5672:5672"
+      - "15672:15672"
   gateway-api:
     build:
       context: .
@@ -50,10 +61,17 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
       - DOTNET_USE_POLLING_FILE_WATCHER=true
+      - ConnectionStrings__ProjectDb=${PROJECT_DB_CONN:-Host=postgres;Port=5432;Database=projectdb;Username=${POSTGRES_USER:-project};Password=${POSTGRES_PASSWORD:-projectpwd}}
+      - Rabbit__Host=${RABBITMQ_HOST:-rabbitmq}
+      - Rabbit__User=${RABBITMQ_USER:-guest}
+      - Rabbit__Pass=${RABBITMQ_PASS:-guest}
     expose:
       - "5001"
     networks:
       - gameai-network
+    depends_on:
+      - postgres
+      - rabbitmq
 
   conversation-api:
     build:
@@ -80,6 +98,8 @@ services:
       - "5002"
     networks:
       - gameai-network
+    depends_on:
+      - rabbitmq
 
 volumes:
   nuget_cache:

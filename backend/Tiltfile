@@ -59,6 +59,9 @@ docker_build_with_restart(
 k8s_yaml([
     'k8s/namespace.yaml',
     'k8s/configmap.yaml',
+    'k8s/secrets.yaml',
+    'k8s/postgres.yaml',
+    'k8s/rabbitmq.yaml',
     'k8s/project-deployment.yaml',
     'k8s/conversation-deployment.yaml', 
     'k8s/gateway-deployment.yaml',
@@ -77,6 +80,8 @@ k8s_yaml([
 # Configure resources and port forwarding
 k8s_resource('gateway-api', port_forwards='5000:5000', resource_deps=['install-nginx-ingress'], labels=['services'])
 k8s_resource('project-api', port_forwards='5001:5001', labels=['services'])
+k8s_resource('postgres', labels=['infrastructure'])
+k8s_resource('rabbitmq', labels=['infrastructure'])
 k8s_resource('conversation-api', port_forwards='5002:5002', labels=['services'])
 
 k8s_resource('prometheus', port_forwards='9090:9090', labels=['monitoring'])

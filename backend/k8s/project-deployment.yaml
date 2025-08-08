@@ -23,12 +23,39 @@ spec:
         ports:
         - containerPort: 5001
         env:
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: gameai-secrets-dev
+              key: postgres-user
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: gameai-secrets-dev
+              key: postgres-password
         - name: ASPNETCORE_URLS
           value: "http://+:5001"
         - name: ASPNETCORE_ENVIRONMENT
           value: "Docker"
         - name: DOTNET_USE_POLLING_FILE_WATCHER
           value: "true"
+        - name: ConnectionStrings__ProjectDb
+          value: "Host=$(POSTGRES_HOST);Port=5432;Database=$(POSTGRES_DB);Username=$(POSTGRES_USER);Password=$(POSTGRES_PASSWORD)"
+        - name: Rabbit__Host
+          valueFrom:
+            configMapKeyRef:
+              name: gameai-config
+              key: RABBIT__HOST
+        - name: Rabbit__User
+          valueFrom:
+            configMapKeyRef:
+              name: gameai-config
+              key: RABBIT__USER
+        - name: Rabbit__Pass
+          valueFrom:
+            secretKeyRef:
+              name: gameai-secrets-dev
+              key: rabbit-password
         envFrom:
         - configMapRef:
             name: gameai-config

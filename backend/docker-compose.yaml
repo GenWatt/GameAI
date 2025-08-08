@@ -6,9 +6,33 @@ networks:
 
 volumes:
   nuget_cache:
+  pgdata:
 
 
 services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: gameai-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-projectdb}
+      POSTGRES_USER: ${POSTGRES_USER:-project}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-projectpwd}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - gameai-network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: gameai-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - gameai-network
+
   gateway-api:
     build:
       context: .
@@ -26,6 +50,14 @@ services:
       dockerfile: services/SynapseStudio.ProjectService/Dockerfile
     expose:
       - "5001"
+    environment:
+      - ConnectionStrings__ProjectDb=${PROJECT_DB_CONN:-Host=postgres;Port=5432;Database=projectdb;Username=${POSTGRES_USER:-project};Password=${POSTGRES_PASSWORD:-projectpwd}}
+      - Rabbit__Host=${RABBITMQ_HOST:-rabbitmq}
+      - Rabbit__User=${RABBITMQ_USER:-guest}
+      - Rabbit__Pass=${RABBITMQ_PASS:-guest}
+    depends_on:
+      - postgres
+      - rabbitmq
     networks:
       - gameai-network
 

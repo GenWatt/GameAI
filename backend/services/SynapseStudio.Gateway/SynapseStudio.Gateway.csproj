@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SynapseStudio.Shared\SynapseStudio.Shared.Observability\SynapseStudio.Shared.Observability.csproj" />
   </ItemGroup>
 
 </Project>

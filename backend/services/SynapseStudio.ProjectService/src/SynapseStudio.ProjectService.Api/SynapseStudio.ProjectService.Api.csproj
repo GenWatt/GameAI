@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\SynapseStudio.Shared\SynapseStudio.Shared.Abstractions\SynapseStudio.Shared.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\SynapseStudio.Shared\SynapseStudio.Shared.Observability\SynapseStudio.Shared.Observability.csproj" />
     <ProjectReference Include="..\SynapseStudio.ProjectService.Domain\SynapseStudio.ProjectService.Domain.csproj" />
   </ItemGroup>
 

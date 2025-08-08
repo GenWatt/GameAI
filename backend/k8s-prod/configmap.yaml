@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gameai-config-prod
+  namespace: gameai-prod
+  labels:
+    app.kubernetes.io/name: gameai
+    app.kubernetes.io/component: config
+    environment: production
+data:
+  ASPNETCORE_ENVIRONMENT: "Production"
+  ASPNETCORE_URLS: "http://+:5000"
+  LOGGING__LOGLEVEL__DEFAULT: "Information"
+  LOGGING__LOGLEVEL__MICROSOFT: "Warning"
+  LOGGING__LOGLEVEL__MICROSOFT_HOSTING_LIFETIME: "Information"
+  DOTNET_RUNNING_IN_CONTAINER: "true"
+  DOTNET_EnableDiagnostics: "0"
+  # Performance optimizations
+  COMPlus_TieredCompilation: "1"
+  COMPlus_TC_QuickJitForLoops: "1"
+  # Security
+  ASPNETCORE_FORWARDEDHEADERS_ENABLED: "true"
+  # Monitoring
+  OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4317"
+  OTEL_SERVICE_NAME: "gameai"
+  OTEL_RESOURCE_ATTRIBUTES: "service.version=1.0.0,deployment.environment=production"

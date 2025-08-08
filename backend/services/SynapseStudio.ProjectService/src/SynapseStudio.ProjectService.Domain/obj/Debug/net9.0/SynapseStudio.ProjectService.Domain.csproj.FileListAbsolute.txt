@@ -21,3 +21,15 @@ C:/Users/Adrian/AdrianekApps/GameAI/backend/services/SynapseStudio.ProjectServic
 /src/services/SynapseStudio.ProjectService/src/SynapseStudio.ProjectService.Domain/obj/Debug/net9.0/refint/SynapseStudio.ProjectService.Domain.dll
 /src/services/SynapseStudio.ProjectService/src/SynapseStudio.ProjectService.Domain/obj/Debug/net9.0/SynapseStudio.ProjectService.Domain.pdb
 /src/services/SynapseStudio.ProjectService/src/SynapseStudio.ProjectService.Domain/obj/Debug/net9.0/ref/SynapseStudio.ProjectService.Domain.dll
+C:\Users\Adrian\AdrianekApps\GameAI\backend\services\SynapseStudio.ProjectService\src\SynapseStudio.ProjectService.Domain\bin\Debug\net9.0\SynapseStudio.ProjectService.Domain.deps.json
+C:\Users\Adrian\AdrianekApps\GameAI\backend\services\SynapseStudio.ProjectService\src\SynapseStudio.ProjectService.Domain\bin\Debug\net9.0\SynapseStudio.ProjectService.Domain.dll
+C:\Users\Adrian\AdrianekApps\GameAI\backend\services\SynapseStudio.ProjectService\src\SynapseStudio.ProjectService.Domain\bin\Debug\net9.0\SynapseStudio.ProjectService.Domain.pdb
+C:\Users\Adrian\AdrianekApps\GameAI\backend\services\SynapseStudio.ProjectService\src\SynapseStudio.ProjectService.Domain\obj\Debug\net9.0\SynapseStudio.ProjectService.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Adrian\AdrianekApps\GameAI\backend\services\SynapseStudio.ProjectService\src\SynapseStudio.ProjectService.Domain\obj\Debug\net9.0\SynapseStudio.ProjectService.Domain.AssemblyInfoInputs.cache
+C:\Users\Adrian\AdrianekApps\GameAI\backend\services\SynapseStudio.ProjectService\src\SynapseStudio.ProjectService.Domain\obj\Debug\net9.0\SynapseStudio.ProjectService.Domain.AssemblyInfo.cs
+C:\Users\Adrian\AdrianekApps\GameAI\backend\services\SynapseStudio.ProjectService\src\SynapseStudio.ProjectService.Domain\obj\Debug\net9.0\SynapseStudio.ProjectService.Domain.csproj.CoreCompileInputs.cache
+C:\Users\Adrian\AdrianekApps\GameAI\backend\services\SynapseStudio.ProjectService\src\SynapseStudio.ProjectService.Domain\obj\Debug\net9.0\SynapseStudio.ProjectService.Domain.sourcelink.json
+C:\Users\Adrian\AdrianekApps\GameAI\backend\services\SynapseStudio.ProjectService\src\SynapseStudio.ProjectService.Domain\obj\Debug\net9.0\SynapseStudio.ProjectService.Domain.dll
+C:\Users\Adrian\AdrianekApps\GameAI\backend\services\SynapseStudio.ProjectService\src\SynapseStudio.ProjectService.Domain\obj\Debug\net9.0\refint\SynapseStudio.ProjectService.Domain.dll
+C:\Users\Adrian\AdrianekApps\GameAI\backend\services\SynapseStudio.ProjectService\src\SynapseStudio.ProjectService.Domain\obj\Debug\net9.0\SynapseStudio.ProjectService.Domain.pdb
+C:\Users\Adrian\AdrianekApps\GameAI\backend\services\SynapseStudio.ProjectService\src\SynapseStudio.ProjectService.Domain\obj\Debug\net9.0\ref\SynapseStudio.ProjectService.Domain.dll

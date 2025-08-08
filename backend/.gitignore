@@ -93,3 +93,6 @@ StyleCopReport.xml
 Thumbs.db
 ehthumbs.db
 Desktop.ini
+obj/
+/obj
+obj

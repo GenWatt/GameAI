@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "7oHTGmZYfpQ=",
+  "dgSpecHash": "fMqiWLA2vOo=",
   "success": true,
-  "projectFilePath": "/src/services/SynapseStudio.ProjectService/src/SynapseStudio.ProjectService.Domain/SynapseStudio.ProjectService.Domain.csproj",
+  "projectFilePath": "C:\\Users\\Adrian\\AdrianekApps\\GameAI\\backend\\services\\SynapseStudio.ProjectService\\src\\SynapseStudio.ProjectService.Domain\\SynapseStudio.ProjectService.Domain.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

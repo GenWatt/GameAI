@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: gameai-service-account
+  namespace: gameai-prod
+  labels:
+    app.kubernetes.io/name: gameai
+    app.kubernetes.io/component: service-account
+    environment: production
+  annotations:
+    eks.amazonaws.com/role-arn: ""  # Add your AWS IAM role ARN if using EKS
+automountServiceAccountToken: false
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: gameai-role
+  namespace: gameai-prod
+  labels:
+    app.kubernetes.io/name: gameai
+    app.kubernetes.io/component: rbac
+    environment: production
+rules:
+- apiGroups: [""]
+  resources: ["configmaps", "secrets"]
+  verbs: ["get", "list"]
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list"]
+- apiGroups: [""]
+  resources: ["events"]
+  verbs: ["create"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: gameai-role-binding
+  namespace: gameai-prod
+  labels:
+    app.kubernetes.io/name: gameai
+    app.kubernetes.io/component: rbac
+    environment: production
+subjects:
+- kind: ServiceAccount
+  name: gameai-service-account
+  namespace: gameai-prod
+roleRef:
+  kind: Role
+  name: gameai-role
+  apiGroup: rbac.authorization.k8s.io

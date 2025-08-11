@@ -4,8 +4,7 @@ metadata:
   name: security-baseline-test
   namespace: gameai-prod
   labels:
-    app: security-test
-    security.alpha.kubernetes.io/sysctls: "kernel.shm_rmid_forced=1"
+    kernel_shm_rmid_forced: "1"
 spec:
   securityContext:
     runAsNonRoot: true
@@ -35,11 +34,11 @@ spec:
       mountPath: /tmp
     resources:
       requests:
-        cpu: "10m"
-        memory: "32Mi"
+        cpu: "100m"     
+        memory: "128Mi" 
       limits:
-        cpu: "50m"
-        memory: "64Mi"
+        cpu: "200m"
+        memory: "256Mi"
   volumes:
   - name: tmp
     emptyDir:

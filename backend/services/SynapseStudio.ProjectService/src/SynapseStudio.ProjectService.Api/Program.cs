@@ -6,6 +6,7 @@ using MediatR;
 using SynapseStudio.ProjectService.Application.Validation;
 using SynapseStudio.ProjectService.Core.Persistence;
 using SynapseStudio.ProjectService.Application.Projects.Commands;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,7 @@ builder.Services.AddProjectServiceCore(builder.Configuration);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddObservability();
+builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
@@ -43,6 +45,15 @@ using (var scope = app.Services.CreateScope())
 
 app.MapObservability();
 app.UseHttpsRedirection();
+app.MapHealthChecks("/api/health");
+app.MapHealthChecks("/api/health/ready", new HealthCheckOptions
+{
+    Predicate = check => check.Tags.Contains("ready")
+});
+app.MapHealthChecks("/api/health/live", new HealthCheckOptions
+{
+    Predicate = _ => true
+});
 
 app.Use(async (ctx, next) =>
 {

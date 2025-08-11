@@ -14,6 +14,7 @@ services:
     image: postgres:16-alpine
     container_name: gameai-postgres
     environment:
+      POSTGRES_HOST: postgres
       POSTGRES_DB: ${POSTGRES_DB:-projectdb}
       POSTGRES_USER: ${POSTGRES_USER:-project}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-projectpwd}
@@ -51,10 +52,13 @@ services:
     expose:
       - "5001"
     environment:
-      - ConnectionStrings__ProjectDb=${PROJECT_DB_CONN:-Host=postgres;Port=5432;Database=projectdb;Username=${POSTGRES_USER:-project};Password=${POSTGRES_PASSWORD:-projectpwd}}
-      - Rabbit__Host=${RABBITMQ_HOST:-rabbitmq}
-      - Rabbit__User=${RABBITMQ_USER:-guest}
-      - Rabbit__Pass=${RABBITMQ_PASS:-guest}
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DB=projectdb
+      - POSTGRES_USER=project
+      - POSTGRES_PASSWORD=projectpwd
+      - Rabbit__Host=rabbitmq
+      - Rabbit__User=guest
+      - Rabbit__Pass=guest
     depends_on:
       - postgres
       - rabbitmq

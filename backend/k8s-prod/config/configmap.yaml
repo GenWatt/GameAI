@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gameai-config-prod
+  namespace: gameai-prod
+data:
+  ASPNETCORE_ENVIRONMENT: "Production"
+  ASPNETCORE_URLS: "http://+:5000"
+  POSTGRES_HOST: "postgres.gameai-prod.svc.cluster.local"
+  POSTGRES_DB: "projectdb"
+  RABBIT__HOST: "rabbitmq.gameai-prod.svc.cluster.local"
+  # Service discovery for Ocelot
+  PROJECT_API_HOST: "project-api.gameai-prod.svc.cluster.local"
+  CONVERSATION_API_HOST: "conversation-api.gameai-prod.svc.cluster.local"

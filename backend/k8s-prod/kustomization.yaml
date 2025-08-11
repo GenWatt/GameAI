@@ -1,0 +1,35 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  # Base resources
+  - base/namespace.yaml
+  - base/network-policies.yaml
+  - base/rbac.yaml
+  
+  # Configuration
+  - config/configmap.yaml
+  # Secret template only - real secrets applied separately
+  
+  # Databases
+  - databases/postgres.yaml
+  - databases/rabbitmq.yaml
+  - databases/postgres-pvc.yaml
+  
+  # Services
+  - services/conversation-deployment.yaml
+  - services/gateway-deployment.yaml
+  - services/project-deployment.yaml
+  
+  # Ingress
+  - ingress/ingress.yaml
+  
+  # Security
+  - security/security-baseline.yaml
+  
+  # Monitoring - applied separately to avoid CRD issues
+  # - monitoring/grafana-dashboards.yaml
+  # - monitoring/grafana-deployment.yaml
+  # - monitoring/prometheus-config.yaml
+  # - monitoring/prometheus-deployment.yaml
+  # - monitoring/prometheus-rbac.yaml

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using SynapseStudio.Shared.Observability.Extensions;
@@ -35,6 +36,14 @@ if (app.Environment.IsDevelopment())
 app.MapObservability();
 app.UseRouting();
 app.MapHealthChecks("/api/health");
+app.MapHealthChecks("/api/health/ready", new HealthCheckOptions
+{
+    Predicate = check => check.Tags.Contains("ready")
+});
+app.MapHealthChecks("/api/health/live", new HealthCheckOptions
+{
+    Predicate = _ => true
+});
 
 app.UseCors("AllowTauriApp");
 app.UseHttpsRedirection();

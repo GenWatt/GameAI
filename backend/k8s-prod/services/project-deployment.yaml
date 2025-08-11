@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: conversation-api
+  name: project-api
   namespace: gameai-prod
   labels:
-    app.kubernetes.io/name: conversation-api
+    app.kubernetes.io/name: project-api
     app.kubernetes.io/component: microservice
     app.kubernetes.io/version: "1.0.0"
     environment: production
   annotations:
     deployment.kubernetes.io/revision: "1"
 spec:
-  replicas: 3
+  replicas: 1
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -19,25 +19,23 @@ spec:
       maxSurge: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: conversation-api
+      app.kubernetes.io/name: project-api
       app.kubernetes.io/component: microservice
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: conversation-api
+        app.kubernetes.io/name: project-api
         app.kubernetes.io/component: microservice
         app.kubernetes.io/version: "1.0.0"
         environment: production
       annotations:
         prometheus.io/scrape: 'true'
         prometheus.io/path: '/metrics'
-        prometheus.io/port: '5002'
+        prometheus.io/port: '5001'
         co.elastic.logs/enabled: 'true'
         co.elastic.logs/json.keys_under_root: 'true'
     spec:
       serviceAccountName: gameai-service-account
-      imagePullSecrets:
-      - name: registry-credentials
       securityContext:
         runAsNonRoot: true
         runAsUser: 1001
@@ -55,22 +53,22 @@ spec:
                 - key: app.kubernetes.io/name
                   operator: In
                   values:
-                  - conversation-api
+                  - project-api
               topologyKey: kubernetes.io/hostname
-      topologySpreadConstraints:
-      - maxSkew: 1
-        topologyKey: topology.kubernetes.io/zone
-        whenUnsatisfiable: DoNotSchedule
-        labelSelector:
-          matchLabels:
-            app.kubernetes.io/name: conversation-api
+      # topologySpreadConstraints:
+      # - maxSkew: 1
+      #   topologyKey: topology.kubernetes.io/zone
+      #   whenUnsatisfiable: DoNotSchedule
+      #   labelSelector:
+      #     matchLabels:
+      #       app.kubernetes.io/name: project-api
       containers:
-      - name: conversation-api
-        image: genwatt/conversation-api:1.0.0  # Use specific version, not latest
+      - name: project-api
+        image: genwatt/project-api:latest  # Use specific version, not latest
         imagePullPolicy: Always
         ports:
         - name: http
-          containerPort: 5002
+          containerPort: 5001
           protocol: TCP
         securityContext:
           allowPrivilegeEscalation: false
@@ -81,16 +79,51 @@ spec:
           capabilities:
             drop:
             - ALL
-        envFrom:
-        - configMapRef:
-            name: gameai-config-prod
-        - secretRef:
-            name: gameai-secrets
+        # envFrom:
+        # - configMapRef:
+        #     name: gameai-config-prod
+        # - secretRef:
+        #     name: gameai-secrets
         env:
         - name: POD_NAME
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
+        - name: POSTGRES_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: gameai-config-prod
+              key: POSTGRES_HOST
+        - name: POSTGRES_DB
+          valueFrom:
+            configMapKeyRef:
+              name: gameai-config-prod
+              key: POSTGRES_DB
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: gameai-secrets
+              key: postgres-user
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: gameai-secrets
+              key: postgres-password
+        - name: Rabbit__Host
+          valueFrom:
+            configMapKeyRef:
+              name: gameai-config-prod
+              key: RABBIT__HOST
+        - name: Rabbit__User
+          valueFrom:
+            secretKeyRef:
+              name: gameai-secrets
+              key: rabbit-user
+        - name: Rabbit__Pass
+          valueFrom:
+            secretKeyRef:
+              name: gameai-secrets
+              key: rabbit-password
         - name: POD_NAMESPACE
           valueFrom:
             fieldRef:
@@ -106,43 +139,30 @@ spec:
           mountPath: /var/log
         resources:
           requests:
-            cpu: "200m"
-            memory: "256Mi"
-            ephemeral-storage: "1Gi"
+            cpu: "100m"   
+            memory: "128Mi"
           limits:
-            cpu: "1000m"
-            memory: "512Mi"
-            ephemeral-storage: "2Gi"
+            cpu: "500m"
+            memory: "256Mi"
         livenessProbe:
           httpGet:
-            path: /health
+            path: /api/health/live
             port: http
-            scheme: HTTP
           initialDelaySeconds: 30
           periodSeconds: 10
-          timeoutSeconds: 5
-          failureThreshold: 3
-          successThreshold: 1
         readinessProbe:
           httpGet:
-            path: /health/ready
+            path: /api/health/ready
             port: http
-            scheme: HTTP
-          initialDelaySeconds: 5
-          periodSeconds: 5
-          timeoutSeconds: 3
-          failureThreshold: 3
-          successThreshold: 1
-        startupProbe:
-          httpGet:
-            path: /health
-            port: http
-            scheme: HTTP
           initialDelaySeconds: 10
           periodSeconds: 5
-          timeoutSeconds: 3
+        startupProbe:
+          httpGet:
+            path: /api/health
+            port: http
+          initialDelaySeconds: 15
+          periodSeconds: 10
           failureThreshold: 30
-          successThreshold: 1
       volumes:
       - name: tmp
         emptyDir:
@@ -157,44 +177,44 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: conversation-api
+  name: project-api
   namespace: gameai-prod
   labels:
-    app.kubernetes.io/name: conversation-api
+    app.kubernetes.io/name: project-api
     app.kubernetes.io/component: microservice
     environment: production
   annotations:
     prometheus.io/scrape: 'true'
     prometheus.io/path: '/metrics'
-    prometheus.io/port: '5002'
+    prometheus.io/port: '5001'
 spec:
   type: ClusterIP
   sessionAffinity: None
   ports:
   - name: http
-    port: 5002
+    port: 5001
     targetPort: http
     protocol: TCP
   selector:
-    app.kubernetes.io/name: conversation-api
+    app.kubernetes.io/name: project-api
     app.kubernetes.io/component: microservice
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: conversation-api-hpa
+  name: project-api-hpa
   namespace: gameai-prod
   labels:
-    app.kubernetes.io/name: conversation-api
+    app.kubernetes.io/name: project-api
     app.kubernetes.io/component: microservice
     environment: production
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: conversation-api
-  minReplicas: 3
-  maxReplicas: 10
+    name: project-api
+  minReplicas: 1
+  maxReplicas: 1
   metrics:
   - type: Resource
     resource:
@@ -229,15 +249,15 @@ spec:
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
-  name: conversation-api-pdb
+  name: project-api-pdb
   namespace: gameai-prod
   labels:
-    app.kubernetes.io/name: conversation-api
+    app.kubernetes.io/name: project-api
     app.kubernetes.io/component: microservice
     environment: production
 spec:
-  minAvailable: 2
+  minAvailable: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: conversation-api
+      app.kubernetes.io/name: project-api
       app.kubernetes.io/component: microservice
